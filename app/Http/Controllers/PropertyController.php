@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Property;
 use Illuminate\Http\Request;
 
 class PropertyController extends Controller
@@ -11,7 +13,9 @@ class PropertyController extends Controller
      */
     public function index()
     {
-        //
+         $properties = Property::with('category')->latest()->get();
+
+    return view('properties.index', compact('properties'));
     }
 
     /**
@@ -19,16 +23,43 @@ class PropertyController extends Controller
      */
     public function create()
     {
-        //
+         $categories = Category::all();
+
+    return view('properties.create', compact('categories'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
+     public function store(Request $request)
+{
+    $request->validate([
+        'title' => 'required|max:255',
+        'description' => 'required',
+        'price' => 'required|numeric',
+        'location' => 'required',
+        'category_id' => 'required|exists:categories,id',
+        'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
+
+    $image = null;
+
+    if ($request->hasFile('image')) {
+        $image = $request->file('image')->store('properties', 'public');
     }
+
+    Property::create([
+        'title' => $request->title,
+        'description' => $request->description,
+        'price' => $request->price,
+        'location' => $request->location,
+        'category_id' => $request->category_id,
+        'image' => $image,
+    ]);
+
+    return redirect()->route('properties.index')
+        ->with('success', 'Property added successfully.');
+}
 
     /**
      * Display the specified resource.
@@ -49,16 +80,46 @@ class PropertyController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        //
+    public function update(Request $request, Property $property)
+{
+    $request->validate([
+        'title' => 'required|max:255',
+        'description' => 'required',
+        'price' => 'required|numeric',
+        'location' => 'required',
+        'category_id' => 'required|exists:categories,id',
+        'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
+
+    $image = $property->image;
+
+    if ($request->hasFile('image')) {
+        $image = $request->file('image')->store('properties', 'public');
     }
+
+    $property->update([
+        'title' => $request->title,
+        'description' => $request->description,
+        'price' => $request->price,
+        'location' => $request->location,
+        'category_id' => $request->category_id,
+        'image' => $image,
+    ]);
+
+    return redirect()
+        ->route('properties.index')
+        ->with('success', 'Property updated successfully.');
+}
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
-    }
+    public function destroy(Property $property)
+{
+    $property->delete();
+
+    return redirect()
+        ->route('properties.index')
+        ->with('success', 'Property deleted successfully.');
+}
 }

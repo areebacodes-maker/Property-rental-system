@@ -16,6 +16,33 @@
         Add Property
     </a>
 
+<form action="{{ route('properties.index') }}" method="GET" class="mb-3">
+
+    <div class="row">
+
+        <div class="col-md-6">
+
+            <input
+                type="text"
+                name="search"
+                class="form-control"
+                placeholder="Search by title or location..."
+                value="{{ $search }}">
+
+        </div>
+
+        <div class="col-md-2">
+
+            <button class="btn btn-primary">
+                Search
+            </button>
+
+ </div>
+
+    </div>
+
+</form>
+
     <table class="table table-bordered">
 
         <tr>
@@ -25,9 +52,10 @@
             <th>Category</th>
             <th>Price</th>
             <th>Location</th>
+            <th>Actions</th>
         </tr>
 
-        @foreach($properties as $property)
+        @forelse($properties as $property)
 
         <tr>
 
@@ -44,15 +72,56 @@
 
             <td>{{ $property->category->name }}</td>
 
-            <td>{{ $property->price }}</td>
+            <td>Rs. {{ number_format($property->price) }}</td>
 
             <td>{{ $property->location }}</td>
 
+            <td>
+
+    <a href="{{ route('properties.edit', $property->id) }}"
+       class="btn btn-warning btn-sm">
+        Edit
+    </a>
+
+    <form action="{{ route('properties.destroy', $property->id) }}"
+          method="POST"
+          style="display:inline;">
+
+        @csrf
+        @method('DELETE')
+
+        <button
+            class="btn btn-danger btn-sm"
+            onclick="return confirm('Delete this property?')">
+
+            Delete
+
+        </button>
+
+    </form>
+
+</td>
         </tr>
 
-        @endforeach
+@empty
+
+<tr>
+    <td colspan="7" class="text-center">
+        No Properties Found
+    </td>
+</tr>
+
+        @endforelse
 
     </table>
+
+<div class="mt-3">
+    {{ $properties->links() }}
+</div>
+
+
+
+       
 
 </div>
 

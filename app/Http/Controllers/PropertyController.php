@@ -11,12 +11,20 @@ class PropertyController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-         $properties = Property::with('category')->latest()->get();
+    public function index(Request $request)
+{
+    $search = $request->search;
 
-    return view('properties.index', compact('properties'));
-    }
+    $properties = Property::with('category')
+        ->when($search, function ($query) use ($search) {
+            $query->where('title', 'like', "%{$search}%")
+                  ->orWhere('location', 'like', "%{$search}%");
+        })
+        ->latest()
+        ->paginate(5);
+
+    return view('properties.index', compact('properties', 'search'));
+}
 
     /**
      * Show the form for creating a new resource.
@@ -72,10 +80,12 @@ class PropertyController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
-    {
-        //
-    }
+    public function edit(Property $property)
+{
+    $categories = Category::all();
+
+    return view('properties.edit', compact('property', 'categories'));
+}
 
     /**
      * Update the specified resource in storage.

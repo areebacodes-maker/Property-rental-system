@@ -68,7 +68,9 @@
                 @endif
             </td>
 
-            <td>{{ $property->title }}</td>
+            <td><a href="{{ route('properties.show',$property->id) }}">
+    {{ $property->title }}
+</a></td>
 
             <td>{{ $property->category->name }}</td>
 
@@ -77,6 +79,13 @@
             <td>{{ $property->location }}</td>
 
             <td>
+
+<a href="{{ route('properties.show',$property->id) }}"
+class="btn btn-info btn-sm">
+
+View
+
+</a>
 
     <a href="{{ route('properties.edit', $property->id) }}"
        class="btn btn-warning btn-sm">

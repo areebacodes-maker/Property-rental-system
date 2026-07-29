@@ -1,0 +1,52 @@
+@extends('layouts.app')
+
+@section('content')
+
+<div class="container mt-4">
+
+    <div class="card">
+
+        @if($property->image)
+            <img src="{{ asset('storage/'.$property->image) }}"
+                 class="card-img-top"
+                 style="height:350px;object-fit:cover;">
+        @endif
+
+        <div class="card-body">
+
+            <h2>{{ $property->title }}</h2>
+
+            <p>
+                <strong>Category:</strong>
+                {{ $property->category->name }}
+            </p>
+
+            <p>
+                <strong>Price:</strong>
+                Rs. {{ number_format($property->price) }}
+            </p>
+
+            <p>
+                <strong>Location:</strong>
+                {{ $property->location }}
+            </p>
+
+            <p>
+                <strong>Description:</strong><br>
+                {{ $property->description }}
+            </p>
+
+            <a href="{{ route('properties.index') }}"
+               class="btn btn-secondary">
+
+                Back
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+@endsection

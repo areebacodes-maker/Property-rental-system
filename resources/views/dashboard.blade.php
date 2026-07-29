@@ -1,18 +1,54 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    {{ __("You're logged in!") }}
+@section('content')
+
+<div class="container mt-4">
+
+    <h2 class="mb-4">Dashboard</h2>
+
+    <div class="row">
+
+        <div class="col-md-4 mb-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h5>Total Categories</h5>
+                    <h2>{{ \App\Models\Category::count() }}</h2>
                 </div>
             </div>
         </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5>Total Properties</h5>
+                    <h2>{{ \App\Models\Property::count() }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card bg-warning">
+                <div class="card-body">
+                    <h5>Latest Property</h5>
+                    <h6>
+                        {{ optional(\App\Models\Property::latest()->first())->title ?? 'No Property' }}
+                    </h6>
+                </div>
+            </div>
+        </div>
+
     </div>
-    
-</x-app-layout>
+
+    <div class="mt-4">
+        <a href="{{ route('categories.index') }}" class="btn btn-success">
+            Categories
+        </a>
+
+        <a href="{{ route('properties.index') }}" class="btn btn-primary">
+            Properties
+        </a>
+    </div>
+
+</div>
+
+@endsection

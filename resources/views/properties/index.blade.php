@@ -16,11 +16,12 @@
         Add Property
     </a>
 
-<form action="{{ route('properties.index') }}" method="GET" class="mb-3">
+
+        <form action="{{ route('properties.index') }}" method="GET" class="mb-3">
 
     <div class="row">
 
-        <div class="col-md-6">
+        <div class="col-md-4">
 
             <input
                 type="text"
@@ -31,17 +32,49 @@
 
         </div>
 
+        <div class="col-md-3">
+
+            <select name="category" class="form-select">
+
+                <option value="">All Categories</option>
+
+                @foreach($categories as $cat)
+
+                    <option
+                        value="{{ $cat->id }}"
+                        {{ $category == $cat->id ? 'selected' : '' }}>
+
+                        {{ $cat->name }}
+
+                    </option>
+
+                @endforeach
+
+            </select>
+
+        </div>
+
         <div class="col-md-2">
 
             <button class="btn btn-primary">
                 Search
             </button>
 
- </div>
+        </div>
+
+        <div class="col-md-2">
+
+            <a href="{{ route('properties.index') }}" class="btn btn-secondary">
+                Reset
+            </a>
+
+        </div>
 
     </div>
 
 </form>
+
+        
 
     <table class="table table-bordered">
 

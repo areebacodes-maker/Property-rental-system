@@ -39,6 +39,54 @@
 
     </div>
 
+<div class="card mt-4">
+
+    <div class="card-header">
+        <h4>Recent Properties</h4>
+    </div>
+
+    <div class="card-body">
+
+        <table class="table table-bordered">
+
+            <tr>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Price</th>
+            </tr>
+
+            @foreach(\App\Models\Property::latest()->take(5)->get() as $property)
+
+            <tr>
+
+                <td>{{ $property->title }}</td>
+
+                <td>{{ $property->category->name }}</td>
+
+                <td>Rs. {{ number_format($property->price) }}</td>
+
+            </tr>
+
+            @endforeach
+
+        </table>
+
+<div class="mt-3">
+
+    <a href="{{ route('properties.create') }}" class="btn btn-success">
+        + Add Property
+    </a>
+
+    <a href="{{ route('categories.create') }}" class="btn btn-primary">
+        + Add Category
+    </a>
+
+</div>
+
+    </div>
+
+</div>
+
     <div class="mt-4">
         <a href="{{ route('categories.index') }}" class="btn btn-success">
             Categories

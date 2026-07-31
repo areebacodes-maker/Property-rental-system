@@ -6,41 +6,31 @@
 
     <div class="card">
 
-        @if($property->image)
-            <img src="{{ asset('storage/'.$property->image) }}"
-                 class="card-img-top"
-                 style="height:350px;object-fit:cover;">
-        @endif
+        <div class="card-header">
+            <h3>{{ $property->title }}</h3>
+        </div>
 
         <div class="card-body">
 
-            <h2>{{ $property->title }}</h2>
+            @if($property->image)
+                <img src="{{ asset('storage/'.$property->image) }}"
+                     width="350"
+                     class="mb-3">
+            @endif
 
-            <p>
-                <strong>Category:</strong>
-                {{ $property->category->name }}
-            </p>
+            <p><strong>Category:</strong> {{ $property->category->name }}</p>
 
-            <p>
-                <strong>Price:</strong>
-                Rs. {{ number_format($property->price) }}
-            </p>
+            <p><strong>Price:</strong> Rs. {{ number_format($property->price) }}</p>
 
-            <p>
-                <strong>Location:</strong>
-                {{ $property->location }}
-            </p>
+            <p><strong>Location:</strong> {{ $property->location }}</p>
 
-            <p>
-                <strong>Description:</strong><br>
-                {{ $property->description }}
-            </p>
+            <p><strong>Description:</strong></p>
+
+            <p>{{ $property->description }}</p>
 
             <a href="{{ route('properties.index') }}"
                class="btn btn-secondary">
-
                 Back
-
             </a>
 
         </div>
